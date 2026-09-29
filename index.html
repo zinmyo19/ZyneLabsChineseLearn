@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="my">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#f4f0e7" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#151918" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" href="data:," />
+  <title>Chinese Learn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      color-scheme:light dark;
+      --paper:#f4f0e7;--paper-2:#fffdf7;--ink:#1e2422;--muted:#646b66;--line:#d7d1c4;
+      --red:#ba3d31;--red-dark:#8f2d25;--jade:#2f7569;--jade-soft:#dcebe5;--gold:#bd8a2a;
+      --shadow:0 14px 34px rgba(46,38,27,.10);--nav:rgba(244,240,231,.94)
+    }
+    @media(prefers-color-scheme:dark){:root{
+      --paper:#151918;--paper-2:#202624;--ink:#f2eee4;--muted:#adb5af;--line:#38413d;
+      --red:#e16a5e;--red-dark:#f08377;--jade:#68b6a5;--jade-soft:#253e38;--gold:#ddb461;
+      --shadow:0 18px 40px rgba(0,0,0,.28);--nav:rgba(21,25,24,.94)
+    }}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--paper);color:var(--ink);font-family:"Noto Sans Myanmar",sans-serif;line-height:1.6}
+    button,input,textarea{font:inherit}
+    button{color:inherit}
+    .app{max-width:1120px;margin:0 auto;padding:28px 24px 108px}
+    .hero{display:grid;grid-template-columns:minmax(0,1.22fr) minmax(260px,.78fr);gap:28px;align-items:stretch;margin-bottom:30px}
+    .hero-main{padding:34px 0 16px}
+    .date-line{display:flex;align-items:center;gap:10px;color:var(--jade);font-weight:700;font-size:.9rem;margin-bottom:14px}
+    .date-line:before{content:"";width:34px;height:2px;background:var(--jade)}
+    h1{font-size:clamp(2.1rem,5vw,4.6rem);line-height:1.16;letter-spacing:-.045em;margin:0;max-width:760px}
+    .hero p{font-size:1.05rem;color:var(--muted);max-width:640px;margin:18px 0 24px}
+    .hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .primary,.secondary,.small-btn,.icon-btn,.choice,.cat-btn,.nav-btn,.swap-btn,.record-btn{border:0;cursor:pointer}
+    .primary{background:var(--red);color:#fff;padding:13px 19px;border-radius:10px;font-weight:700;box-shadow:0 5px 0 var(--red-dark)}
+    .primary:active{transform:translateY(3px);box-shadow:0 2px 0 var(--red-dark)}
+    .secondary{background:transparent;border:1px solid var(--line);padding:12px 18px;border-radius:10px;font-weight:700}
+    .today-card{background:var(--paper-2);border:1px solid var(--line);box-shadow:var(--shadow);padding:24px;position:relative;overflow:hidden;min-height:252px;display:flex;flex-direction:column;justify-content:space-between}
+    .today-card:after{content:"好";font-family:"Noto Serif SC",serif;position:absolute;right:-10px;bottom:-48px;font-size:11rem;color:var(--jade-soft);font-weight:900;line-height:1;z-index:0}
+    .today-card>*{position:relative;z-index:1}
+    .today-card h2{font-size:.92rem;margin:0;color:var(--muted);font-weight:600}
+    .big-hanzi{font-family:"Noto Serif SC",serif;font-size:4rem;font-weight:900;line-height:1;margin:18px 0 6px;color:var(--red)}
+    .today-card .pinyin{font-weight:700;color:var(--jade)}
+    .today-card .meaning{font-size:1rem;margin:3px 0 16px}
+    .listen-inline{display:flex;align-items:center;gap:10px}
+    .play-circle{width:44px;height:44px;border-radius:50%;border:0;background:var(--ink);color:var(--paper-2);display:grid;place-items:center;cursor:pointer}
+    .play-circle svg{width:18px;height:18px;fill:currentColor;margin-left:2px}
+    .speed{font-size:.78rem;color:var(--muted);border:1px solid var(--line);background:transparent;padding:6px 9px;border-radius:999px;cursor:pointer}
+    .view{display:none}.view.active{display:block}
+    .section-head{display:flex;justify-content:space-between;gap:20px;align-items:end;margin:0 0 16px}
+    .section-head h2{margin:0;font-size:1.5rem;letter-spacing:-.02em}
+    .section-head p{margin:0;color:var(--muted);font-size:.9rem}
+    .category-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+    .cat-btn{padding:8px 13px;border:1px solid var(--line);border-radius:999px;background:transparent;font-size:.86rem}
+    .cat-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+    .phrase-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .phrase-card{background:var(--paper-2);border:1px solid var(--line);padding:19px;min-height:190px;display:flex;flex-direction:column;position:relative}
+    .phrase-card.hidden{display:none}
+    .phrase-card .tag{font-size:.74rem;color:var(--muted);margin-bottom:12px}
+    .hanzi{font-family:"Noto Serif SC",serif;font-size:1.75rem;font-weight:700;line-height:1.25}
+    .pinyin{color:var(--jade);font-weight:600;margin-top:4px;font-size:.93rem}
+    .translation{margin-top:10px;color:var(--ink)}
+    .card-foot{margin-top:auto;padding-top:15px;display:flex;justify-content:space-between;align-items:center}
+    .small-btn{display:flex;align-items:center;gap:7px;background:var(--jade-soft);color:var(--jade);padding:7px 11px;border-radius:8px;font-weight:700;font-size:.82rem}
+    .small-btn svg{width:16px;height:16px}
+    .number{font-family:ui-monospace,monospace;color:var(--muted);font-size:.76rem}
+    .practice-layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);gap:20px}
+    .panel{background:var(--paper-2);border:1px solid var(--line);padding:26px}
+    .quiz-kicker{font-size:.85rem;color:var(--muted);margin-bottom:18px}
+    .quiz-prompt{min-height:170px;display:grid;place-items:center;text-align:center;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .quiz-hanzi{font-family:"Noto Serif SC",serif;font-size:clamp(2.7rem,7vw,5.4rem);font-weight:900;line-height:1.2}
+    .quiz-pinyin{color:var(--jade);font-weight:700;margin-top:5px}
+    .choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+    .choice{text-align:left;background:transparent;border:1px solid var(--line);padding:13px;border-radius:9px;min-height:58px}
+    .choice:hover,.choice:focus-visible{border-color:var(--jade)}
+    .choice.correct{background:var(--jade-soft);border-color:var(--jade);color:var(--jade);font-weight:700}
+    .choice.wrong{background:color-mix(in srgb,var(--red) 12%,transparent);border-color:var(--red)}
+    .quiz-meta{display:flex;justify-content:space-between;align-items:center;margin-top:16px;color:var(--muted);font-size:.88rem}
+    .progress{height:6px;background:var(--line);overflow:hidden;flex:1;max-width:180px;margin-left:12px}
+    .progress span{display:block;height:100%;background:var(--red);width:10%;transition:width .3s}
+    .shadow-box h3,.translator h2{margin:0 0 8px;font-size:1.3rem}
+    .shadow-box>p,.translator>p{color:var(--muted);margin:0 0 20px;font-size:.92rem}
+    .shadow-target{padding:18px 0;border-block:1px solid var(--line);margin-bottom:18px}
+    .shadow-target .hanzi{font-size:2.2rem}
+    .rec-controls{display:flex;gap:8px;flex-wrap:wrap}
+    .record-btn{background:var(--red);color:#fff;padding:10px 14px;border-radius:9px;font-weight:700}
+    .record-btn.recording{animation:pulse 1s infinite}
+    .record-btn:disabled,.secondary:disabled{opacity:.45;cursor:not-allowed}
+    .recording-status{min-height:28px;margin-top:12px;color:var(--muted);font-size:.86rem}
+    #userPlayback{width:100%;margin-top:10px;display:none}
+    .translate-wrap{display:grid;grid-template-columns:1fr 50px 1fr;gap:12px;align-items:stretch}
+    .translate-box{background:var(--paper-2);border:1px solid var(--line);padding:20px;min-height:280px}
+    .box-label{font-size:.8rem;font-weight:700;color:var(--muted);margin-bottom:12px}
+    textarea{width:100%;height:150px;resize:vertical;background:transparent;border:0;color:var(--ink);font-size:1.05rem;outline:0;padding:0}
+    .output-text{font-size:1.15rem;min-height:150px;white-space:pre-wrap}
+    .output-hanzi{font-family:"Noto Serif SC",serif;font-size:2rem;font-weight:700}
+    .output-pinyin{color:var(--jade);margin-top:8px}
+    .translate-actions{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:12px;gap:8px}
+    .char-count{font-size:.78rem;color:var(--muted)}
+    .swap-btn{align-self:center;width:44px;height:44px;border-radius:50%;background:var(--ink);color:var(--paper);font-size:1.2rem}
+    .dictionary{margin-top:24px}
+    .dictionary h3{font-size:1.05rem;margin-bottom:12px}
+    .dict-list{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+    .dict-item{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 0;border-bottom:1px solid var(--line);cursor:pointer}
+    .dict-item strong{font-family:"Noto Serif SC",serif;font-size:1.08rem}
+    .dict-item span{color:var(--muted);font-size:.85rem;text-align:right}
+    .empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:44px 20px;border:1px dashed var(--line)}
+    .toast{position:fixed;left:50%;bottom:86px;transform:translate(-50%,18px);background:var(--ink);color:var(--paper);padding:10px 15px;border-radius:8px;font-size:.85rem;opacity:0;pointer-events:none;transition:.2s;z-index:20;white-space:nowrap;max-width:calc(100vw - 30px)}
+    .toast.show{opacity:1;transform:translate(-50%,0)}
+    .bottom-nav{position:fixed;z-index:10;left:0;right:0;bottom:0;background:var(--nav);border-top:1px solid var(--line);backdrop-filter:blur(12px);padding:8px max(16px,env(safe-area-inset-left)) calc(8px + env(safe-area-inset-bottom));display:flex;justify-content:center;gap:4px}
+    .nav-btn{background:transparent;min-width:120px;padding:8px 14px;color:var(--muted);font-size:.82rem;font-weight:700;border-radius:9px;display:flex;align-items:center;justify-content:center;gap:7px}
+    .nav-btn svg{width:18px;height:18px}
+    .nav-btn.active{color:var(--red);background:color-mix(in srgb,var(--red) 10%,transparent)}
+    :focus-visible{outline:3px solid color-mix(in srgb,var(--gold) 70%,transparent);outline-offset:2px}
+    @keyframes pulse{50%{box-shadow:0 0 0 8px color-mix(in srgb,var(--red) 18%,transparent)}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+    @media(max-width:820px){
+      .app{padding:20px 16px 105px}.hero{grid-template-columns:1fr;gap:12px}.hero-main{padding-top:4px}.today-card{min-height:225px}.phrase-grid{grid-template-columns:repeat(2,1fr)}.practice-layout{grid-template-columns:1fr}.translate-wrap{grid-template-columns:1fr}.swap-btn{transform:rotate(90deg);justify-self:center;margin:-2px 0}.dict-list{grid-template-columns:1fr}
+    }
+    @media(max-width:540px){
+      .app{padding-inline:13px}.hero-main{padding-bottom:8px}h1{font-size:2.35rem}.hero p{font-size:.95rem}.today-card,.panel,.translate-box{padding:19px}.phrase-grid{grid-template-columns:1fr}.phrase-card{min-height:175px}.choices{grid-template-columns:1fr}.section-head{align-items:start;flex-direction:column;gap:2px}.nav-btn{min-width:0;flex:1;padding-inline:7px}.bottom-nav{justify-content:stretch}.translate-box{min-height:230px}textarea,.output-text{min-height:110px;height:110px}
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="view active" id="learnView" aria-labelledby="learnTitle">
+      <div class="hero">
+        <div class="hero-main">
+          <div class="date-line">အသံနားထောင် · လိုက်ပြော · မှတ်မိအောင်လုပ်</div>
+          <h1 id="learnTitle">ဒီနေ့ ၁၀ မိနစ်<br>တရုတ်စကားပြောမယ်</h1>
+          <p>နေ့စဉ်သုံး စကားစု ၂၄ ခုကို တရုတ်စာ၊ pinyin နဲ့ မြန်မာဘာသာပြန် တွဲပြီး လေ့လာနိုင်တယ်။</p>
+          <div class="hero-actions">
+            <button class="primary" id="startLesson">စသင်မယ်</button>
+            <button class="secondary" data-go="practice">အသံနားထောင်ပြီး စမ်းမယ်</button>
+          </div>
+        </div>
+        <aside class="today-card" aria-label="ဒီနေ့ရဲ့ စကားစု">
+          <div>
+            <h2>ဒီနေ့ရဲ့ ပထမဆုံးစကား</h2>
+            <div class="big-hanzi">你好</div>
+            <div class="pinyin">nǐ hǎo</div>
+            <div class="meaning">မင်္ဂလာပါ</div>
+          </div>
+          <div class="listen-inline">
+            <button class="play-circle" data-audio="data:application/octet-stream;base64,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" aria-label="你好 အသံနားထောင်ရန်">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <button class="speed" data-speed>1× အမြန်နှုန်း</button>
+          </div>
+        </aside>
+      </div>
+
+      <div class="section-head" id="phraseStart">
+        <div><h2>အသုံးဝင်တဲ့ စကားစုများ</h2><p>စကားစုကို နှိပ်ပြီး အသံထွက် နားထောင်ပါ</p></div>
+        <p id="phraseCount">၂၄ စကားစု</p>
+      </div>
+      <div class="category-row" id="categoryRow" aria-label="အမျိုးအစားရွေးရန်"></div>
+      <div class="phrase-grid" id="phraseGrid"></div>
+    </section>
+
+    <section class="view" id="practiceView" aria-labelledby="practiceTitle">
+      <div class="section-head">
+        <div><h2 id="practiceTitle">မှတ်မိလား စမ်းကြည့်မယ်</h2><p>ရွေးချယ်ပြီး ချက်ချင်းအဖြေစစ်နိုင်တယ်</p></div>
+      </div>
+      <div class="practice-layout">
+        <section class="panel" aria-label="စကားစု စမ်းသပ်ခန်း">
+          <div class="quiz-kicker" id="quizKicker">မေးခွန်း ၁ / ၁၀</div>
+          <div class="quiz-prompt">
+            <div>
+              <button class="play-circle" id="quizAudio" aria-label="မေးခွန်းအသံ နားထောင်ရန်">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+              <div class="quiz-hanzi" id="quizHanzi"></div>
+              <div class="quiz-pinyin" id="quizPinyin"></div>
+            </div>
+          </div>
+          <div class="choices" id="choices"></div>
+          <div class="quiz-meta">
+            <span id="scoreText">အမှတ် ၀</span>
+            <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+          </div>
+        </section>
+
+        <aside class="panel shadow-box">
+          <h3>လိုက်ပြော လေ့ကျင့်ခန်း</h3>
+          <p>နမူနာအသံကို နားထောင်၊ ပြီးရင် ကိုယ့်အသံကို ပြန်ဖွင့်နားထောင်ပါ။</p>
+          <div class="shadow-target">
+            <div class="hanzi" id="shadowHanzi">请说慢一点</div>
+            <div class="pinyin" id="shadowPinyin">qǐng shuō màn yìdiǎn</div>
+            <div class="translation" id="shadowTranslation">နည်းနည်းဖြည်းဖြည်းပြောပါ</div>
+          </div>
+          <div class="rec-controls">
+            <button class="secondary" id="sampleAudio">နမူနာ နားထောင်</button>
+            <button class="record-btn" id="recordBtn">အသံဖမ်းမယ်</button>
+            <button class="secondary" id="newShadow">နောက်တစ်ခု</button>
+          </div>
+          <div class="recording-status" id="recordingStatus">အသံဖမ်းရန် microphone ခွင့်ပြုချက် လိုပါမယ်။</div>
+          <audio id="userPlayback" controls></audio>
+        </aside>
+      </div>
+    </section>
+
+    <section class="view" id="translateView" aria-labelledby="translateTitle">
+      <div class="section-head translator">
+        <div><h2 id="translateTitle">စကားစု ဘာသာပြန်</h2><p>နေ့စဉ်သုံး စကားစုစာရင်းထဲက တရုတ် ↔ မြန်မာ အဓိပ္ပာယ်ကို ရှာပေးတယ်</p></div>
+      </div>
+      <div class="translate-wrap">
+        <div class="translate-box">
+          <div class="box-label" id="inputLabel">မြန်မာ</div>
+          <textarea id="translateInput" maxlength="120" placeholder="ဥပမာ — ကျေးဇူးတင်ပါတယ်"></textarea>
+          <div class="translate-actions"><span class="char-count"><span id="charCount">၀</span>/၁၂၀</span><button class="primary" id="translateBtn">ဘာသာပြန်မယ်</button></div>
+        </div>
+        <button class="swap-btn" id="swapLang" aria-label="ဘာသာပြန်မည့် ဘာသာစကား လဲရန်">⇄</button>
+        <div class="translate-box">
+          <div class="box-label" id="outputLabel">中文 + Pinyin</div>
+          <div class="output-text" id="translateOutput">ဘာသာပြန်လိုတဲ့ စကားစုကို ရိုက်ထည့်ပါ။</div>
+          <div class="translate-actions"><span class="char-count" id="matchNote">စကားစု ၂၄ ခု ပါဝင်သည်</span><button class="secondary" id="outputAudio" disabled>အသံနားထောင်</button></div>
+        </div>
+      </div>
+      <div class="dictionary">
+        <h3>အမြန်ရွေးရန်</h3>
+        <div class="dict-list" id="dictList"></div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="အဓိက မီနူး">
+    <button class="nav-btn active" data-view="learn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 5.5v14"/></svg>သင်ခန်းစာ</button>
+    <button class="nav-btn" data-view="practice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 0-7 7v4a7 7 0 0 0 14 0V9a7 7 0 0 0-7-7z"/><path d="M8 22h8M12 20v2"/></svg>လေ့ကျင့်</button>
+    <button class="nav-btn" data-view="translate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 8 6 6M4 14l6-7 2-3M2 5h12M7 2h1"/><path d="m14 22 4-10 4 10M15.5 18h5"/></svg>ဘာသာပြန်</button>
+  </nav>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <audio id="globalAudio"></audio>
+
+<script>
+(function(){
+  const phrases=[
+    {zh:'你好',py:'nǐ hǎo',my:'မင်္ဂလာပါ',cat:'နှုတ်ဆက်',audio:'ni-hao.mp3'},
+    {zh:'谢谢',py:'xiè xie',my:'ကျေးဇူးတင်ပါတယ်',cat:'နှုတ်ဆက်',audio:'xie-xie.mp3'},
+    {zh:'对不起',py:'duì bu qǐ',my:'တောင်းပန်ပါတယ်',cat:'နှုတ်ဆက်',audio:'dui-bu-qi.mp3'},
+    {zh:'没关系',py:'méi guān xi',my:'ကိစ္စမရှိပါဘူး',cat:'နှုတ်ဆက်',audio:'mei-guan-xi.mp3'},
+    {zh:'请问',py:'qǐng wèn',my:'မေးပါရစေ',cat:'နှုတ်ဆက်',audio:'qing-wen.mp3'},
+    {zh:'再见',py:'zài jiàn',my:'ပြန်တွေ့မယ်',cat:'နှုတ်ဆက်',audio:'zai-jian.mp3'},
+    {zh:'我叫…',py:'wǒ jiào…',my:'ကျွန်တော့်နာမည်က…',cat:'စကားပြော',audio:'wo-jiao.mp3'},
+    {zh:'很高兴认识你',py:'hěn gāoxìng rènshi nǐ',my:'တွေ့ရတာ ဝမ်းသာပါတယ်',cat:'စကားပြော',audio:'hen-gao-xing.mp3'},
+    {zh:'你会说英语吗？',py:'nǐ huì shuō Yīngyǔ ma?',my:'အင်္ဂလိပ်စကား ပြောတတ်လား',cat:'စကားပြော',audio:'hui-ying-yu.mp3'},
+    {zh:'我听不懂',py:'wǒ tīng bu dǒng',my:'နားမလည်ဘူး',cat:'စကားပြော',audio:'wo-ting-bu-dong.mp3'},
+    {zh:'请再说一遍',py:'qǐng zài shuō yí biàn',my:'ထပ်ပြောပေးပါ',cat:'စကားပြော',audio:'zai-shuo-yi-bian.mp3'},
+    {zh:'请说慢一点',py:'qǐng shuō màn yìdiǎn',my:'နည်းနည်းဖြည်းဖြည်းပြောပါ',cat:'စကားပြော',audio:'shuo-man-yi-dian.mp3'},
+    {zh:'这个多少钱？',py:'zhège duōshao qián?',my:'ဒါ ဘယ်လောက်လဲ',cat:'ဈေးဝယ်',audio:'duo-shao-qian.mp3'},
+    {zh:'太贵了',py:'tài guì le',my:'ဈေးအရမ်းကြီးတယ်',cat:'ဈေးဝယ်',audio:'tai-gui-le.mp3'},
+    {zh:'我要这个',py:'wǒ yào zhège',my:'ဒါကို ယူမယ်',cat:'ဈေးဝယ်',audio:'yao-zhe-ge.mp3'},
+    {zh:'可以便宜一点吗？',py:'kěyǐ piányi yìdiǎn ma?',my:'နည်းနည်းဈေးလျှော့ပေးလို့ရမလား',cat:'ဈေးဝယ်',audio:'pian-yi-yi-dian.mp3'},
+    {zh:'我饿了',py:'wǒ è le',my:'ဗိုက်ဆာတယ်',cat:'စားသောက်',audio:'wo-e-le.mp3'},
+    {zh:'我要一碗面',py:'wǒ yào yì wǎn miàn',my:'ခေါက်ဆွဲတစ်ပွဲ ပေးပါ',cat:'စားသောက်',audio:'yi-wan-mian.mp3'},
+    {zh:'不要辣',py:'bú yào là',my:'အစပ်မထည့်ပါနဲ့',cat:'စားသောက်',audio:'bu-yao-la.mp3'},
+    {zh:'很好吃',py:'hěn hǎochī',my:'အရမ်းအရသာရှိတယ်',cat:'စားသောက်',audio:'hen-hao-chi.mp3'},
+    {zh:'洗手间在哪里？',py:'xǐshǒujiān zài nǎli?',my:'အိမ်သာ ဘယ်မှာလဲ',cat:'အရေးပေါ်',audio:'xi-shou-jian.mp3'},
+    {zh:'请帮帮我',py:'qǐng bāngbang wǒ',my:'ကျွန်တော့်ကို ကူညီပေးပါ',cat:'အရေးပေါ်',audio:'qing-bang-bang-wo.mp3'},
+    {zh:'我迷路了',py:'wǒ mílù le',my:'လမ်းပျောက်နေတယ်',cat:'အရေးပေါ်',audio:'wo-mi-lu-le.mp3'},
+    {zh:'我需要医生',py:'wǒ xūyào yīshēng',my:'ဆရာဝန်လိုတယ်',cat:'အရေးပေါ်',audio:'xu-yao-yi-sheng.mp3'}
+  ];
+  const cats=['အားလုံး','နှုတ်ဆက်','စကားပြော','ဈေးဝယ်','စားသောက်','အရေးပေါ်'];
+  const digits=['၀','၁','၂','၃','၄','၅','၆','၇','၈','၉'];
+  const mmNum=n=>String(n).replace(/\d/g,d=>digits[d]);
+  const globalAudio=document.getElementById('globalAudio');
+  let speed=1;
+  let currentAudio='';
+  function play(path){
+    document.querySelectorAll('audio').forEach(a=>{if(a!==globalAudio)a.pause()});
+    if(currentAudio!==path){globalAudio.src=path;currentAudio=path}
+    globalAudio.playbackRate=speed;globalAudio.currentTime=0;
+    globalAudio.play().catch(()=>toast('အသံဖွင့်မရသေးပါ။ ထပ်နှိပ်ကြည့်ပါ။'));
+  }
+  document.addEventListener('click',e=>{
+    const audioBtn=e.target.closest('[data-audio]');if(audioBtn)play(audioBtn.dataset.audio);
+  });
+  document.querySelector('[data-speed]').addEventListener('click',e=>{
+    speed=speed===1?0.75:1;e.currentTarget.textContent=(speed===1?'1×':'0.75×')+' အမြန်နှုန်း';
+    toast(speed===1?'ပုံမှန်အမြန်နှုန်း':'ဖြည်းဖြည်း နားထောင်မယ်');
+  });
+  function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._x);t._x=setTimeout(()=>t.classList.remove('show'),2200)}
+
+  const catRow=document.getElementById('categoryRow');
+  cats.forEach((cat,i)=>{const b=document.createElement('button');b.className='cat-btn'+(i===0?' active':'');b.textContent=cat;b.onclick=()=>filterCat(cat,b);catRow.appendChild(b)});
+  const grid=document.getElementById('phraseGrid');
+  phrases.forEach((p,i)=>{
+    const article=document.createElement('article');article.className='phrase-card';article.dataset.cat=p.cat;
+    article.innerHTML='<div class="tag">'+p.cat+'</div><div class="hanzi" lang="zh-CN">'+p.zh+'</div><div class="pinyin">'+p.py+'</div><div class="translation">'+p.my+'</div><div class="card-foot"><button class="small-btn" data-audio="assets/'+p.audio+'" aria-label="'+p.zh+' အသံနားထောင်ရန်"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>အသံ</button><span class="number">'+String(i+1).padStart(2,'0')+'</span></div>';
+    grid.appendChild(article);
+  });
+  function filterCat(cat,btn){document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');let count=0;document.querySelectorAll('.phrase-card').forEach(c=>{const show=cat==='အားလုံး'||c.dataset.cat===cat;c.classList.toggle('hidden',!show);if(show)count++});document.getElementById('phraseCount').textContent=mmNum(count)+' စကားစု'}
+  document.getElementById('startLesson').onclick=()=>document.getElementById('phraseStart').scrollIntoView({behavior:'smooth'});
+
+  function showView(name){
+    document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===name+'View'));
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===name));
+    window.scrollTo({top:0,behavior:'smooth'});
+    if(name==='practice'&&!quizStarted)startQuiz();
+  }
+  document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>showView(b.dataset.view));
+  document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showView(b.dataset.go));
+
+  let quiz=[],qIndex=0,score=0,answered=false,quizStarted=false;
+  function shuffled(a){return [...a].sort(()=>Math.random()-.5)}
+  function startQuiz(){quiz=shuffled(phrases).slice(0,10);qIndex=0;score=0;quizStarted=true;renderQuestion()}
+  function renderQuestion(){
+    if(qIndex>=quiz.length){renderResult();return}
+    answered=false;const q=quiz[qIndex];
+    document.getElementById('quizKicker').textContent='မေးခွန်း '+mmNum(qIndex+1)+' / ၁၀';
+    document.getElementById('quizHanzi').textContent=q.zh;document.getElementById('quizPinyin').textContent=q.py;
+    document.getElementById('quizAudio').onclick=()=>play('assets/'+q.audio);
+    const wrong=shuffled(phrases.filter(x=>x!==q)).slice(0,3);const opts=shuffled([q,...wrong]);
+    const wrap=document.getElementById('choices');wrap.innerHTML='';
+    opts.forEach(o=>{const b=document.createElement('button');b.className='choice';b.textContent=o.my;b.onclick=()=>answer(b,o===q,q);wrap.appendChild(b)});
+    document.getElementById('scoreText').textContent='အမှတ် '+mmNum(score);
+    document.getElementById('progressBar').style.width=((qIndex+1)*10)+'%';
+  }
+  function answer(btn,correct,q){if(answered)return;answered=true;if(correct){score++;btn.classList.add('correct');toast('မှန်တယ် — ကောင်းတယ်!')}else{btn.classList.add('wrong');[...document.querySelectorAll('.choice')].find(b=>b.textContent===q.my)?.classList.add('correct')}setTimeout(()=>{qIndex++;renderQuestion()},900)}
+  function renderResult(){const pct=score*10;document.querySelector('.quiz-prompt').innerHTML='<div><div class="quiz-hanzi">'+score+'/10</div><div class="quiz-pinyin">'+(pct>=80?'အရမ်းကောင်းတယ်':pct>=50?'တိုးတက်လာပြီ':'နားထောင်ပြီး ထပ်စမ်းမယ်')+'</div></div>';document.getElementById('choices').innerHTML='<button class="primary" id="retryQuiz">ထပ်စမ်းမယ်</button>';document.getElementById('retryQuiz').onclick=startQuiz;document.getElementById('quizKicker').textContent='ပြီးပါပြီ';document.getElementById('scoreText').textContent='ရမှတ် '+mmNum(pct)+'%';document.getElementById('progressBar').style.width='100%'}
+
+  let shadowIndex=11;
+  function updateShadow(){const p=phrases[shadowIndex];document.getElementById('shadowHanzi').textContent=p.zh;document.getElementById('shadowPinyin').textContent=p.py;document.getElementById('shadowTranslation').textContent=p.my;document.getElementById('sampleAudio').onclick=()=>play('assets/'+p.audio)}
+  document.getElementById('newShadow').onclick=()=>{shadowIndex=(shadowIndex+1)%phrases.length;updateShadow();resetRecording()};updateShadow();
+  let recorder=null,chunks=[],stream=null;
+  const recordBtn=document.getElementById('recordBtn'),status=document.getElementById('recordingStatus'),playback=document.getElementById('userPlayback');
+  recordBtn.onclick=async()=>{
+    if(recorder&&recorder.state==='recording'){recorder.stop();return}
+    try{
+      stream=await navigator.mediaDevices.getUserMedia({audio:true});
+      const type=['audio/mp4','audio/webm;codecs=opus','audio/webm'].find(t=>window.MediaRecorder&&MediaRecorder.isTypeSupported(t))||'';
+      recorder=new MediaRecorder(stream,type?{mimeType:type}:undefined);chunks=[];
+      recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+      recorder.onstop=()=>{const blob=new Blob(chunks,{type:recorder.mimeType||'audio/webm'});playback.src=URL.createObjectURL(blob);playback.style.display='block';stream.getTracks().forEach(t=>t.stop());recordBtn.textContent='အသံဖမ်းမယ်';recordBtn.classList.remove('recording');status.textContent='ကိုယ့်အသံကို ပြန်ဖွင့်ပြီး နမူနာနဲ့ နှိုင်းယှဉ်ပါ။'};
+      recorder.start();recordBtn.textContent='ရပ်မယ်';recordBtn.classList.add('recording');status.textContent='အသံဖမ်းနေတယ်… စကားစုကို လိုက်ပြောပါ။';
+    }catch(err){status.textContent='Microphone သုံးခွင့် မရသေးပါ။ Browser Settings မှာ ခွင့်ပြုပေးပါ။'}
+  };
+  function resetRecording(){if(stream)stream.getTracks().forEach(t=>t.stop());if(playback.src)URL.revokeObjectURL(playback.src);playback.removeAttribute('src');playback.style.display='none';status.textContent='အသံဖမ်းရန် microphone ခွင့်ပြုချက် လိုပါမယ်။';recordBtn.textContent='အသံဖမ်းမယ်';recordBtn.classList.remove('recording')}
+
+  let direction='my-zh',lastMatch=null;
+  const input=document.getElementById('translateInput'),output=document.getElementById('translateOutput'),outputAudio=document.getElementById('outputAudio');
+  input.addEventListener('input',()=>document.getElementById('charCount').textContent=mmNum(input.value.length));
+  function normalize(s){return s.toLowerCase().replace(/[？?၊။….,!\s]/g,'')}
+  function findMatch(value){const n=normalize(value);if(!n)return null;return phrases.find(p=>normalize(direction==='my-zh'?p.my:p.zh)===n)||phrases.find(p=>normalize(direction==='my-zh'?p.my:p.zh).includes(n)||n.includes(normalize(direction==='my-zh'?p.my:p.zh)))}
+  function translate(){const p=findMatch(input.value);lastMatch=p;outputAudio.disabled=!p;if(!p){output.textContent=input.value.trim()?'ဒီစကားစုကို မတွေ့သေးပါ။ အောက်က စာရင်းထဲက စကားစုကို ရွေးကြည့်ပါ။':'ဘာသာပြန်လိုတဲ့ စကားစုကို ရိုက်ထည့်ပါ။';document.getElementById('matchNote').textContent='နီးစပ်ရာ စကားစု မတွေ့ပါ';return}
+    if(direction==='my-zh'){output.innerHTML='<div class="output-hanzi" lang="zh-CN">'+p.zh+'</div><div class="output-pinyin">'+p.py+'</div>'}else{output.textContent=p.my}
+    document.getElementById('matchNote').textContent=p.cat+' · ကိုက်ညီမှု တွေ့သည်';
+  }
+  document.getElementById('translateBtn').onclick=translate;
+  input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();translate()}});
+  outputAudio.onclick=()=>{if(lastMatch)play('assets/'+lastMatch.audio)};
+  document.getElementById('swapLang').onclick=()=>{direction=direction==='my-zh'?'zh-my':'my-zh';document.getElementById('inputLabel').textContent=direction==='my-zh'?'မြန်မာ':'中文';document.getElementById('outputLabel').textContent=direction==='my-zh'?'中文 + Pinyin':'မြန်မာ';input.placeholder=direction==='my-zh'?'ဥပမာ — ကျေးဇူးတင်ပါတယ်':'例如 — 谢谢';const old=lastMatch;if(old){input.value=direction==='my-zh'?old.my:old.zh;translate()}else{input.value='';output.textContent='ဘာသာပြန်လိုတဲ့ စကားစုကို ရိုက်ထည့်ပါ။'}document.getElementById('charCount').textContent=mmNum(input.value.length)};
+  const dict=document.getElementById('dictList');
+  phrases.slice(0,8).forEach(p=>{const d=document.createElement('button');d.className='dict-item';d.innerHTML='<strong>'+p.zh+'</strong><span>'+p.my+'</span>';d.onclick=()=>{input.value=direction==='my-zh'?p.my:p.zh;document.getElementById('charCount').textContent=mmNum(input.value.length);translate();window.scrollTo({top:0,behavior:'smooth'})};dict.appendChild(d)});
+})();
+</script>
+</body>
+</html>
