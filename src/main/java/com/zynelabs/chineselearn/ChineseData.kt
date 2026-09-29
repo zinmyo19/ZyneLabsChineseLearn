@@ -1,0 +1,96 @@
+package com.zynelabs.chineselearn
+
+data class Entry(val hanzi: String, val pinyin: String, val burmese: String, val category: String)
+
+object ChineseData {
+    val categories = listOf("问候 Greetings", "数字 Numbers", "家庭 Family", "食物 Food", "日常用语 Daily", "时间 Time", "感觉 Feelings")
+
+    val entries: List<Entry> = listOf(
+        // 问候 Greetings
+        Entry("你好", "nǐ hǎo", "မင်္ဂလာပါ", "问候 Greetings"),
+        Entry("谢谢", "xièxie", "ကျေးဇူးတင်ပါတယ်", "问候 Greetings"),
+        Entry("再见", "zàijiàn", "နုတ်ဆက်ပါတယ်", "问候 Greetings"),
+        Entry("对不起", "duìbuqǐ", "တောင်းပန်ပါတယ်", "问候 Greetings"),
+        Entry("没关系", "méi guānxi", "ရပါတယ်၊ ကိစ္စမရှိဘူး", "问候 Greetings"),
+        Entry("早上好", "zǎoshang hǎo", "မင်္ဂလာနံနက်ခင်းပါ", "问候 Greetings"),
+        Entry("晚安", "wǎn'ān", "ကောင်းသောညပါ", "问候 Greetings"),
+        Entry("你好吗", "nǐ hǎo ma", "နေကောင်းလား", "问候 Greetings"),
+        Entry("我很好", "wǒ hěn hǎo", "ကျွန်တော် နေကောင်းပါတယ်", "问候 Greetings"),
+        Entry("欢迎", "huānyíng", "ကြိုဆိုပါတယ်", "问候 Greetings"),
+        // 数字 Numbers
+        Entry("一", "yī", "တစ်", "数字 Numbers"),
+        Entry("二", "èr", "နှစ်", "数字 Numbers"),
+        Entry("三", "sān", "သုံး", "数字 Numbers"),
+        Entry("四", "sì", "လေး", "数字 Numbers"),
+        Entry("五", "wǔ", "ငါး", "数字 Numbers"),
+        Entry("六", "liù", "ခြောက်", "数字 Numbers"),
+        Entry("七", "qī", "ခုနစ်", "数字 Numbers"),
+        Entry("八", "bā", "ရှစ်", "数字 Numbers"),
+        Entry("九", "jiǔ", "ကိုး", "数字 Numbers"),
+        Entry("十", "shí", "ဆယ်", "数字 Numbers"),
+        Entry("百", "bǎi", "ရာ", "数字 Numbers"),
+        Entry("千", "qiān", "ထောင်", "数字 Numbers"),
+        Entry("万", "wàn", "သောင်း", "数字 Numbers"),
+        // 家庭 Family
+        Entry("我", "wǒ", "ကျွန်တော် / ငါ", "家庭 Family"),
+        Entry("你", "nǐ", "မင်း / နင်", "家庭 Family"),
+        Entry("他", "tā", "သူ (ယောကျာ်း)", "家庭 Family"),
+        Entry("她", "tā", "သူ (မိန်းမ)", "家庭 Family"),
+        Entry("爸爸", "bàba", "အဖေ", "家庭 Family"),
+        Entry("妈妈", "māma", "အမေ", "家庭 Family"),
+        Entry("哥哥", "gēge", "အကို", "家庭 Family"),
+        Entry("姐姐", "jiějie", "အမ", "家庭 Family"),
+        Entry("弟弟", "dìdi", "ညီ (မောင်ငယ်)", "家庭 Family"),
+        Entry("妹妹", "mèimei", "ညီမ", "家庭 Family"),
+        Entry("朋友", "péngyou", "သူငယ်ချင်း", "家庭 Family"),
+        Entry("家人", "jiārén", "မိသားစု", "家庭 Family"),
+        // 食物 Food
+        Entry("米饭", "mǐfàn", "ထမင်း", "食物 Food"),
+        Entry("面条", "miàntiáo", "ခေါက်ဆွဲ", "食物 Food"),
+        Entry("水", "shuǐ", "ရေ", "食物 Food"),
+        Entry("茶", "chá", "လက်ဖက်ရေ", "食物 Food"),
+        Entry("咖啡", "kāfēi", "ကော်ဖီ", "食物 Food"),
+        Entry("猪肉", "zhūròu", "ဝက်သား", "食物 Food"),
+        Entry("鸡肉", "jīròu", "ကြက်သား", "食物 Food"),
+        Entry("牛肉", "niúròu", "အမဲသား", "食物 Food"),
+        Entry("鱼", "yú", "ငါး", "食物 Food"),
+        Entry("菜", "cài", "ဟင်းသီးဟင်းရွက်", "食物 Food"),
+        Entry("水果", "shuǐguǒ", "သစ်သီး", "食物 Food"),
+        Entry("好吃", "hǎo chī", "စားလို့ကောင်းတယ်", "食物 Food"),
+        Entry("饱", "bǎo", "ဗိုက်ပြည့်တယ်", "食物 Food"),
+        // 日常用语 Daily
+        Entry("多少钱", "duōshao qián", "ဘယ်လောက်ကျသလဲ", "日常用语 Daily"),
+        Entry("太贵了", "tài guì le", "ဈေးအရမ်းကြီးတယ်", "日常用语 Daily"),
+        Entry("便宜", "piányi", "ဈေးချိုတယ်", "日常用语 Daily"),
+        Entry("在哪里", "zài nǎlǐ", "ဘယ်မှာလဲ", "日常用语 Daily"),
+        Entry("我要", "wǒ yào", "ကျွန်တော်လိုချင်တယ်", "日常用语 Daily"),
+        Entry("不要", "bú yào", "မလိုချင်ဘူး", "日常用语 Daily"),
+        Entry("好的", "hǎo de", "ကောင်းပြီ / ဟုတ်ကဲ့", "日常用语 Daily"),
+        Entry("可以", "kěyǐ", "ရတယ်", "日常用语 Daily"),
+        Entry("不可以", "bù kěyǐ", "မရဘူး", "日常用语 Daily"),
+        Entry("请问", "qǐngwèn", "မေးပါရစေ", "日常用语 Daily"),
+        Entry("听不懂", "tīng bù dǒng", "နားမလည်ဘူး", "日常用语 Daily"),
+        Entry("慢一点", "màn yìdiǎn", "ဖြည်းဖြည်းလေးပြောပါ", "日常用语 Daily"),
+        Entry("很好", "hěn hǎo", "အရမ်းကောင်းတယ်", "日常用语 Daily"),
+        // 时间 Time
+        Entry("今天", "jīntiān", "ဒီနေ့", "时间 Time"),
+        Entry("明天", "míngtiān", "မနက်ဖြန်", "时间 Time"),
+        Entry("昨天", "zuótiān", "မနေ့က", "时间 Time"),
+        Entry("现在", "xiànzài", "အခု", "时间 Time"),
+        Entry("早上", "zǎoshang", "မနက်ပိုင်း", "时间 Time"),
+        Entry("中午", "zhōngwǔ", "နေ့လယ်ပိုင်း", "时间 Time"),
+        Entry("晚上", "wǎnshang", "ညပိုင်း", "时间 Time"),
+        Entry("小时", "xiǎoshí", "နာရီ", "时间 Time"),
+        Entry("分钟", "fēnzhōng", "မိနစ်", "时间 Time"),
+        Entry("星期", "xīngqī", "သီတင်းပတ်", "时间 Time"),
+        // 感觉 Feelings
+        Entry("高兴", "gāoxìng", "ပျော်ရွှင်တယ်", "感觉 Feelings"),
+        Entry("累", "lèi", "ပင်ပန်းတယ်", "感觉 Feelings"),
+        Entry("饿", "è", "ဗိုက်ဆာတယ်", "感觉 Feelings"),
+        Entry("渴", "kě", "ရေဆာတယ်", "感觉 Feelings"),
+        Entry("冷", "lěng", "အေးတယ်", "感觉 Feelings"),
+        Entry("热", "rè", "ပူတယ်", "感觉 Feelings"),
+        Entry("生病", "shēngbìng", "နေမကောင်းဖြစ်တယ်", "感觉 Feelings"),
+        Entry("爱", "ài", "ချစ်တယ်", "感觉 Feelings")
+    )
+}
